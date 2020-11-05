@@ -29,7 +29,7 @@ const routes = [
 
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    NgbModule,
+    NgbModule
   ]
 })
 export class UrlSearchModule { }

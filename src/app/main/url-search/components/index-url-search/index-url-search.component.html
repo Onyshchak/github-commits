@@ -4,14 +4,21 @@
     <header class="d-flex flex-wrap justify-content-center mb-4">
       <div class="form-group">
         <input type="text" [formControl]="urlControl" class="form-control" aria-label="link" required>
-        <div class="text-danger" *ngIf="urlControl.invalid && urlControl.touched">
-          Invalid URL
-        </div>
+        <ng-container *ngIf="urlControl.invalid && urlControl.touched">
+          <div class="text-danger" *ngIf="urlControl.invalid && urlControl.value">
+            Invalid URL
+          </div>
+          <div class="text-danger" *ngIf="urlControl.invalid && !urlControl.value">
+            Required
+          </div>
+        </ng-container>
+
       </div>
       <div class="ml-2">
         <button (click)="getCommits()" type="button" class="btn btn-primary" [disabled]="urlControl.invalid">Search commits</button>
       </div>
     </header>
+    <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = ''">{{ errorMessage }}</ngb-alert>
     <section>
       <app-commits-list [commits]="commits"></app-commits-list>
     </section>

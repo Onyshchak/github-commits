@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { Commit } from 'src/app/shared/models/commit.model';
 import { CommitHttpService } from 'src/app/main/url-search/services/commit-http.service';
@@ -13,6 +15,7 @@ export class IndexUrlSearchComponent implements OnInit {
 
   urlControl: FormControl;
   commits: Array<Commit> = [];
+  errorMessage = '';
 
   constructor(
     private commitHttp: CommitHttpService,
@@ -24,12 +27,20 @@ export class IndexUrlSearchComponent implements OnInit {
   }
 
   getCommits(): void {
+    this.errorMessage = '';
     const data = new URL(this.urlControl.value).pathname.split('/');
     if ((data || []).length < 3) {
-      console.log('Error');
+      this.commits = [];
+      this.errorMessage = 'Not found';
       return;
     }
-    this.commitHttp.getCommitsList(data[1], data[2]).subscribe(commits => this.commits = commits);
+    this.commitHttp.getCommitsList(data[1], data[2])
+      .subscribe(
+        commits => this.commits = commits,
+        error => {
+          this.commits = [];
+          this.errorMessage = error.error.message;
+        });
   }
 
   private setUrlControl(): void {
