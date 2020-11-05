@@ -1,0 +1,19 @@
+<div class="url-search container">
+  <div class="mt-4">
+    <h3 class="text-center mb-4">Search commits by GitHub link</h3>
+    <header class="d-flex flex-wrap justify-content-center mb-4">
+      <div class="form-group">
+        <input type="text" [formControl]="urlControl" class="form-control" aria-label="link" required>
+        <div class="text-danger" *ngIf="urlControl.invalid && urlControl.touched">
+          Invalid URL
+        </div>
+      </div>
+      <div class="ml-2">
+        <button (click)="getCommits()" type="button" class="btn btn-primary" [disabled]="urlControl.invalid">Search commits</button>
+      </div>
+    </header>
+    <section>
+      <app-commits-list [commits]="commits"></app-commits-list>
+    </section>
+  </div>
+</div>

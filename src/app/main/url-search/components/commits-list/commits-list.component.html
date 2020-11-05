@@ -1,0 +1,17 @@
+<div class="commits-list d-flex flex-wrap justify-content-between">
+  <div class="commit col-xl-4 col-md-6 col-12 mb-4" *ngFor="let commit of commits">
+    <div class="card">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="w-50 d-flex flex-column">
+          <a [href]="commit.url" target="_blank" class="card-title text-dark text-truncate" placement="bottom" [ngbTooltip]="commit.text"
+          >{{ commit.text }}</a>
+          <h6 class="card-subtitle text-muted mt-1">{{ commit.date | date: 'dd/MM/yyyy hh:mm' }}</h6>
+        </div>
+        <div class="d-flex flex-nowrap align-items-center justify-content-end w-50">
+          <img [src]="commit.user.userImage" class="rounded-circle mr-2" height="40px" width="40px" alt="user image">
+          <a [href]="commit.user.userUrl" target="_blank" class="card-subtitle text-dark font-weight-bold text-truncate">{{ commit.user.userName }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
