@@ -15,8 +15,8 @@ export class IndexUrlSearchComponent implements OnInit {
   commits: Array<Commit> = [];
   errorMessage = '';
   defaultUser = {
-    name: '',
-    repo: ''
+    name: 'Onyshchak',
+    repo: 'github-commits'
   };
 
   constructor(
