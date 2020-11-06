@@ -26,13 +26,13 @@ export class CommitHttpService {
     return commits.map(commit => {
       return {
         user: {
-          userName: commit.committer.login,
-          userImage: commit.committer.avatar_url,
-          userUrl: commit.committer.html_url
+          userName: commit.committer?.login,
+          userImage: commit.committer?.avatar_url || 'https://i1.wp.com/www.servicepower.co.uk/wp-content/uploads/Image-Not-Available.jpg?resize=300%2C300&ssl=1',
+          userUrl: commit.committer?.html_url
         },
-        text: commit.commit.message,
+        text: commit.commit?.message,
         url: commit.html_url,
-        date: commit.commit.committer.date
+        date: commit.commit?.committer?.date
       };
     });
   }

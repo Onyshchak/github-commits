@@ -28,13 +28,15 @@ export class IndexUrlSearchComponent implements OnInit {
 
   getCommits(): void {
     this.errorMessage = '';
-    const data = new URL(this.urlControl.value).pathname.split('/');
-    if ((data || []).length < 3) {
+    const data = this.urlControl.value.split('github.com/');
+    if ((data || []).length !== 2) {
       this.commits = [];
-      this.errorMessage = 'Not found';
+      this.errorMessage = 'Is not GitHub';
       return;
     }
-    this.commitHttp.getCommitsList(data[1], data[2])
+    const userName = data[1].split('/')[0];
+    const repo = data[1].split('/')[1];
+    this.commitHttp.getCommitsList(userName, repo)
       .subscribe(
         commits => this.commits = commits,
         error => {
