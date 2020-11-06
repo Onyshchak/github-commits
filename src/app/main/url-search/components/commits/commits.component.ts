@@ -3,11 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Commit } from 'src/app/shared/models/commit.model';
 
 @Component({
-  selector: 'app-commits-list',
-  templateUrl: './commits-list.component.html',
-  styleUrls: ['./commits-list.component.scss']
+  selector: 'app-commits',
+  templateUrl: './commits.component.html',
+  styleUrls: ['./commits.component.scss']
 })
-export class CommitsListComponent implements OnInit {
+export class CommitsComponent implements OnInit {
   @Input() commits: Array<Commit>;
 
   constructor() { }

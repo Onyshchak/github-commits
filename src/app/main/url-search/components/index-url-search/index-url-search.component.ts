@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Commit } from 'src/app/shared/models/commit.model';
 import { CommitHttpService } from 'src/app/main/url-search/services/commit-http.service';
@@ -13,22 +11,27 @@ import { CommitHttpService } from 'src/app/main/url-search/services/commit-http.
 })
 export class IndexUrlSearchComponent implements OnInit {
 
-  urlControl: FormControl;
+  searchForm: FormGroup;
   commits: Array<Commit> = [];
   errorMessage = '';
+  defaultUser = {
+    name: '',
+    repo: ''
+  };
 
   constructor(
+    private fb: FormBuilder,
     private commitHttp: CommitHttpService,
-  ) {
-    this.setUrlControl();
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.createFormGroup();
+    this.getDefaultCommits();
   }
 
   getCommits(): void {
-    this.errorMessage = '';
-    const data = this.urlControl.value.split('github.com/');
+    this.removeError();
+    const data = this.searchForm.get('url').value.split('github.com/');
     if ((data || []).length !== 2) {
       this.commits = [];
       this.errorMessage = 'Is not GitHub';
@@ -45,8 +48,24 @@ export class IndexUrlSearchComponent implements OnInit {
         });
   }
 
-  private setUrlControl(): void {
+  removeError(): void {
+    this.errorMessage = '';
+  }
+
+  private getDefaultCommits(): void {
+    this.commitHttp.getCommitsList(this.defaultUser.name, this.defaultUser.repo)
+      .subscribe(
+        commits => this.commits = commits,
+        error => {
+          this.commits = [];
+          this.errorMessage = error.error.message;
+        });
+  }
+
+  private createFormGroup(): void {
     const regexUrlValidation = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-    this.urlControl = new FormControl('', [Validators.pattern(regexUrlValidation), Validators.required]);
+    this.searchForm = this.fb.group({
+      url: ['', [Validators.pattern(regexUrlValidation), Validators.required]]
+    });
   }
 }
